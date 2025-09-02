@@ -30,4 +30,8 @@ bin/
 
 # fabric
 
-run/
+fabric/runs/
+
+# neoforge
+
+neoforge/run/
