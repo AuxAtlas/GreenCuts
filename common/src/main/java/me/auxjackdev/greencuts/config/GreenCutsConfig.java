@@ -11,10 +11,10 @@ public class GreenCutsConfig {
     public boolean enabled = true;
 
     @Setting(value = "auto_plant_delay")
-    @Comment("Delay before attempting to auto-plant a sapling in ticks")
-    public int autoPlantDelay = 80;
+    @Comment("Delay before attempting to auto-plant a sapling in ticks (1 second is 20 ticks)")
+    public int autoPlantDelay = 200;
 
     @Setting(value = "auto_plant_chance")
     @Comment("Percent chance for a sapling to actually auto-plant once the delay completed. Between 1 and 100")
-    public int autoPlantChance = 33;
+    public int autoPlantChance = 66;
 }

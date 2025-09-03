@@ -5,6 +5,7 @@ import me.auxjackdev.greencuts.Constants;
 import me.auxjackdev.greencuts.util.GreenCutsUtils;
 import me.auxjackdev.greencuts.util.IAutoPlantable;
 import me.auxjackdev.greencuts.util.IPlantableBush;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
@@ -64,11 +65,12 @@ public abstract class MixinItemStack extends Entity implements IAutoPlantable {
 
         ServerLevel serverLevel = (ServerLevel) level();
         BlockState state = Block.byItem(getItem().getItem()).defaultBlockState();
+        BlockPos plantPos = getOnPos().above();
 
         plantingTicks = 0;
 
         // Check if this item can be placed(planted) at its current block pos
-        if (!plantableBush.canSurviveAtPos(state, serverLevel, getOnPos())) {
+        if (!plantableBush.canSurviveAtPos(state, serverLevel, plantPos)) {
             if(!plantingFailed) {
                 greenCuts$randomNudge();
             }
@@ -77,8 +79,10 @@ public abstract class MixinItemStack extends Entity implements IAutoPlantable {
 
         // Roll the dice to determine if planting was successful
         if (GreenCutsUtils.runPlantingChance(serverLevel)) {
-            if(getItem().getCount() > 0)
-                serverLevel.setBlockAndUpdate(getOnPos(), state);
+            if(getItem().getCount() > 0) {
+                serverLevel.setBlockAndUpdate(plantPos, state);
+                greenCuts$randomNudge();
+            }
 
             if (getItem().getCount() > 1) {
                 // Decrement this item stack entity's stack count by 1
@@ -101,9 +105,8 @@ public abstract class MixinItemStack extends Entity implements IAutoPlantable {
 
     @Unique
     void greenCuts$randomNudge() {
-        double moveMultiplierX = level().random.nextIntBetweenInclusive(0,2);
-        double moveMultiplierY = level().random.nextIntBetweenInclusive(1,4);
-        double moveMultiplierZ = level().random.nextIntBetweenInclusive(0,2);
+        double moveMultiplierX = level().random.nextIntBetweenInclusive(2,6);
+        double moveMultiplierZ = level().random.nextIntBetweenInclusive(2,6);
 
         if(level().random.nextBoolean())
             moveMultiplierX *= -1;
@@ -111,7 +114,7 @@ public abstract class MixinItemStack extends Entity implements IAutoPlantable {
             moveMultiplierZ *= -1;
 
         // Nudge this item stack entity in a random X/Z direction after placing one so it may one day find a new BlockPos to be planted on
-        move(MoverType.SELF, new Vec3(1d / moveMultiplierX, 1d / moveMultiplierY, 1d / moveMultiplierZ));
+        setDeltaMovement(1d / moveMultiplierX, 1d, 1d / moveMultiplierZ);
     }
 
     @Inject(method = "addAdditionalSaveData", at = @At("HEAD"))
