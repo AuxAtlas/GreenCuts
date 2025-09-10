@@ -11,7 +11,8 @@ dependencies {
     }
     modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
-    include(implementation "org.spongepowered:configurate-hocon:4.1.2")
+    implementation 'org.spongepowered:configurate-hocon:4.1.2'
+    include 'org.spongepowered:configurate-hocon:4.1.2'
 }
 
 loom {

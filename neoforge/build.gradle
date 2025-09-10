@@ -5,8 +5,42 @@ plugins {
 }
 
 dependencies {
-    implementation 'org.spongepowered:configurate-hocon:4.1.2'
-    additionalRuntimeClasspath 'org.spongepowered:configurate-hocon:4.1.2'
+    jarJar(implementation("org.spongepowered:configurate-hocon")) {
+        version {
+            // The version range your mod is actually compatible with.
+            // Note that you may receive a *lower* version than your preferred if another
+            // Mod is only compatible up to 1.7.24, for example, your mod might get 1.7.24 at runtime.
+            strictly '[4.0,5.0)'
+            prefer '4.1.2' // The version actually used in your dev workspace
+        }
+    }
+    jarJar(implementation("org.spongepowered:configurate-core")) {
+        version {
+            // The version range your mod is actually compatible with.
+            // Note that you may receive a *lower* version than your preferred if another
+            // Mod is only compatible up to 1.7.24, for example, your mod might get 1.7.24 at runtime.
+            strictly '[4.0,5.0)'
+            prefer '4.1.2' // The version actually used in your dev workspace
+        }
+    }
+    jarJar(implementation("com.typesafe:config")) {
+        version {
+            // The version range your mod is actually compatible with.
+            // Note that you may receive a *lower* version than your preferred if another
+            // Mod is only compatible up to 1.7.24, for example, your mod might get 1.7.24 at runtime.
+            strictly '[1.0,2.0)'
+            prefer '1.4.1' // The version actually used in your dev workspace
+        }
+    }
+    jarJar(implementation("io.leangen.geantyref:geantyref")) {
+        version {
+            // The version range your mod is actually compatible with.
+            // Note that you may receive a *lower* version than your preferred if another
+            // Mod is only compatible up to 1.7.24, for example, your mod might get 1.7.24 at runtime.
+            strictly '[1.0,2.0)'
+            prefer '1.3.11' // The version actually used in your dev workspace
+        }
+    }
 }
 
 neoForge {
@@ -34,7 +68,6 @@ neoForge {
             // DataGen can be run by - "./gradlew :neoforge:runData" in Terminal.
             // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
             programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
-
         }
         server {
             server()
