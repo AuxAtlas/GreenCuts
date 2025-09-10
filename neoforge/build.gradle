@@ -20,13 +20,6 @@ neoForge {
         minecraftVersion = parchment_minecraft
         mappingsVersion = parchment_version
     }
-    dependencies {
-        jarJar(implementation(group: 'org.spongepowered', name: 'configurate-hocon')) {
-            version {
-                prefer '4.1.2'
-            }
-        }
-    }
     runs {
         configureEach {
             systemProperty('neoforge.enabledGameTestNamespaces', mod_id)
