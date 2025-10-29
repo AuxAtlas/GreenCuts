@@ -1,16 +1,16 @@
-package me.auxjackdev.greencuts.mixin;
+package me.auxatlas.greencuts.mixin;
 
-import me.auxjackdev.greencuts.util.IPlantableBush;
+import me.auxatlas.greencuts.util.IPlantableBush;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.BushBlock;
+import net.minecraft.world.level.block.VegetationBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
-@Mixin(BushBlock.class)
+@Mixin(VegetationBlock.class)
 public abstract class MixinBushBlock extends Block implements IPlantableBush {
     @Shadow
     protected abstract boolean canSurvive(BlockState state, LevelReader level, BlockPos pos);
@@ -20,7 +20,7 @@ public abstract class MixinBushBlock extends Block implements IPlantableBush {
     }
 
     @Override
-    public boolean canSurviveAtPos(BlockState state, ServerLevel serverLevel, BlockPos pos) {
+    public boolean greenCuts$canSurviveAtPos(BlockState state, ServerLevel serverLevel, BlockPos pos) {
         return canSurvive(state, serverLevel, pos);
     }
 

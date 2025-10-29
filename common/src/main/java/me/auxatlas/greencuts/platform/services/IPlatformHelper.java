@@ -1,4 +1,4 @@
-package me.auxjackdev.greencuts.platform.services;
+package me.auxatlas.greencuts.platform.services;
 
 public interface IPlatformHelper {
 

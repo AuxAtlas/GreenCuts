@@ -1,4 +1,4 @@
-package me.auxjackdev.greencuts.util;
+package me.auxatlas.greencuts.util;
 
 public interface IAutoPlantable {
     boolean getPlantingFailed();

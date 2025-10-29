@@ -1,4 +1,4 @@
-package me.auxjackdev.greencuts.config;
+package me.auxatlas.greencuts.config;
 
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 import org.spongepowered.configurate.objectmapping.meta.Comment;

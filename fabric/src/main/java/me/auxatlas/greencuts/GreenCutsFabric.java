@@ -1,4 +1,4 @@
-package me.auxjackdev.greencuts;
+package me.auxatlas.greencuts;
 
 import net.fabricmc.api.ModInitializer;
 

@@ -1,11 +1,9 @@
-package me.auxjackdev.greencuts;
+package me.auxatlas.greencuts;
 
-import me.auxjackdev.greencuts.config.GreenCutsConfig;
+import me.auxatlas.greencuts.config.GreenCutsConfig;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.ConfigurateException;
-import org.spongepowered.configurate.ConfigurationOptions;
 import org.spongepowered.configurate.hocon.HoconConfigurationLoader;
-import org.spongepowered.configurate.serialize.SerializationException;
 
 import java.nio.file.Path;
 

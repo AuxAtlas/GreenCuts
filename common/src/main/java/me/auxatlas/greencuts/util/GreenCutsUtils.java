@@ -1,6 +1,6 @@
-package me.auxjackdev.greencuts.util;
+package me.auxatlas.greencuts.util;
 
-import me.auxjackdev.greencuts.GreenCutsCommon;
+import me.auxatlas.greencuts.GreenCutsCommon;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;

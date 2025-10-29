@@ -1,6 +1,6 @@
-package me.auxjackdev.greencuts.platform;
+package me.auxatlas.greencuts.platform;
 
-import me.auxjackdev.greencuts.platform.services.IPlatformHelper;
+import me.auxatlas.greencuts.platform.services.IPlatformHelper;
 import net.fabricmc.loader.api.FabricLoader;
 
 public class FabricPlatformHelper implements IPlatformHelper {

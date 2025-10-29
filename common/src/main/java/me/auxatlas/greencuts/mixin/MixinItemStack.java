@@ -1,22 +1,22 @@
-package me.auxjackdev.greencuts.mixin;
+package me.auxatlas.greencuts.mixin;
 
-import me.auxjackdev.greencuts.GreenCutsCommon;
-import me.auxjackdev.greencuts.Constants;
-import me.auxjackdev.greencuts.util.GreenCutsUtils;
-import me.auxjackdev.greencuts.util.IAutoPlantable;
-import me.auxjackdev.greencuts.util.IPlantableBush;
+import me.auxatlas.greencuts.Constants;
+import me.auxatlas.greencuts.GreenCutsCommon;
+import me.auxatlas.greencuts.util.GreenCutsUtils;
+import me.auxatlas.greencuts.util.IAutoPlantable;
+import me.auxatlas.greencuts.util.IPlantableBush;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -45,9 +45,12 @@ public abstract class MixinItemStack extends Entity implements IAutoPlantable {
         // Check if this mod is enabled
         if(!GreenCutsCommon.getConfig().enabled)
             return;
-        // Check if we are server-side logic
-        if(level().isClientSide)
+
+
+        // Check if we are server-sided logic
+        if(!(level() instanceof ServerLevel serverLevel)) {
             return;
+        }
         // Check if we already tried planting this item stack entity
         if(getPlantingFailed())
             return;
@@ -63,14 +66,13 @@ public abstract class MixinItemStack extends Entity implements IAutoPlantable {
         if(plantingTicks < GreenCutsCommon.getConfig().autoPlantDelay)
             return;
 
-        ServerLevel serverLevel = (ServerLevel) level();
         BlockState state = Block.byItem(getItem().getItem()).defaultBlockState();
         BlockPos plantPos = getOnPos().above();
 
         plantingTicks = 0;
 
         // Check if this item can be placed(planted) at its current block pos
-        if (!plantableBush.canSurviveAtPos(state, serverLevel, plantPos)) {
+        if (!plantableBush.greenCuts$canSurviveAtPos(state, serverLevel, plantPos)) {
             if(!plantingFailed) {
                 greenCuts$randomNudge();
             }
@@ -118,17 +120,17 @@ public abstract class MixinItemStack extends Entity implements IAutoPlantable {
     }
 
     @Inject(method = "addAdditionalSaveData", at = @At("HEAD"))
-    void greenCuts$itemStackWriteData(CompoundTag tag, CallbackInfo ci) {
+    void greenCuts$itemStackWriteData(ValueOutput val, CallbackInfo ci) {
         CompoundTag greencutsRootTag = new CompoundTag();
         greencutsRootTag.putBoolean(Constants.TAGNAME_PLANTING_FAILD, this.plantingFailed);
         greencutsRootTag.putInt(Constants.TAGNAME_PLANTING_TICKS, this.plantingTicks);
-        tag.put(Constants.MOD_ID, greencutsRootTag);
+        val.store(Constants.MOD_ID, CompoundTag.CODEC, greencutsRootTag);
     }
     @Inject(method = "readAdditionalSaveData", at = @At("HEAD"))
-    void greenCuts$itemStackReadData(CompoundTag tag, CallbackInfo ci) {
-        CompoundTag greencutsRootTag = tag.getCompound(Constants.MOD_ID);
-        this.plantingFailed = greencutsRootTag.getBoolean(Constants.TAGNAME_PLANTING_FAILD);
-        this.plantingTicks = greencutsRootTag.getInt(Constants.TAGNAME_PLANTING_TICKS);
+    void greenCuts$itemStackReadData(ValueInput val, CallbackInfo ci) {
+        CompoundTag greencutsRootTag = val.read(Constants.MOD_ID, CompoundTag.CODEC).orElse(new CompoundTag());
+        this.plantingFailed = greencutsRootTag.getBoolean(Constants.TAGNAME_PLANTING_FAILD).orElse(false);
+        this.plantingTicks = greencutsRootTag.getInt(Constants.TAGNAME_PLANTING_TICKS).orElse(0);
     }
 
 

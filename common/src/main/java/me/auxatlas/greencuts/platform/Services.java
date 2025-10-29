@@ -1,7 +1,7 @@
-package me.auxjackdev.greencuts.platform;
+package me.auxatlas.greencuts.platform;
 
-import me.auxjackdev.greencuts.Constants;
-import me.auxjackdev.greencuts.platform.services.IPlatformHelper;
+import me.auxatlas.greencuts.Constants;
+import me.auxatlas.greencuts.platform.services.IPlatformHelper;
 
 import java.util.ServiceLoader;
 

@@ -1,4 +1,4 @@
-package me.auxjackdev.greencuts;
+package me.auxatlas.greencuts;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
