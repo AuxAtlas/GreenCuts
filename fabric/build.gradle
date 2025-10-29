@@ -2,6 +2,7 @@ plugins {
     id 'multiloader-loader'
     id 'fabric-loom'
     id "com.modrinth.minotaur" version "2.+"
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 dependencies {
     minecraft "com.mojang:minecraft:${minecraft_version}"
@@ -12,7 +13,8 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
     implementation 'org.spongepowered:configurate-hocon:4.1.2'
-    include 'org.spongepowered:configurate-hocon:4.1.2'
+    shadow 'org.spongepowered:configurate-hocon:4.1.2'
+
 }
 
 loom {
@@ -37,6 +39,19 @@ loom {
             runDir('runs/server')
         }
     }
+}
+
+shadowJar {
+    configurations = [project.configurations.shadow]
+    exclude("META-INF")
+}
+
+remapJar {
+    // wait until the shadowJar is done
+    dependsOn(shadowJar)
+    mustRunAfter(shadowJar)
+    // Set the input jar for the task. Here use the shadow Jar that include the .class of the transitive dependency
+    inputFile = file(shadowJar.archivePath)
 }
 
 modrinth {
