@@ -20,7 +20,7 @@ public abstract class MixinBushBlock extends Block implements IPlantableBush {
     }
 
     @Override
-    public boolean canSurviveAtPos(BlockState state, ServerLevel serverLevel, BlockPos pos) {
+    public boolean greenCuts$canSurviveAtPos(BlockState state, ServerLevel serverLevel, BlockPos pos) {
         return canSurvive(state, serverLevel, pos);
     }
 
