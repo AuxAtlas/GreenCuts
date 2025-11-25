@@ -17,12 +17,15 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.phys.AABB;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.util.List;
 
 @Mixin(ItemEntity.class)
 public abstract class MixinItemStack extends Entity implements IAutoPlantable {
@@ -46,13 +49,13 @@ public abstract class MixinItemStack extends Entity implements IAutoPlantable {
         if(!GreenCutsCommon.getConfig().enabled)
             return;
 
-
         // Check if we are server-sided logic
         if(!(level() instanceof ServerLevel serverLevel)) {
             return;
         }
+
         // Check if we already tried planting this item stack entity
-        if(getPlantingFailed())
+        if(plantingFailed)
             return;
         // Check if this item stack entity is a sapling item
         if (!GreenCutsUtils.isSaplingStack(getItem()))
@@ -71,8 +74,21 @@ public abstract class MixinItemStack extends Entity implements IAutoPlantable {
 
         plantingTicks = 0;
 
+        boolean validPlantPos = true;
+
         // Check if this item can be placed(planted) at its current block pos
         if (!plantableBush.greenCuts$canSurviveAtPos(state, serverLevel, plantPos)) {
+            validPlantPos = false;
+        }
+        else {
+            AABB blockBounds = new AABB(plantPos);
+            List<Entity> foundEntities = serverLevel.getEntities((Entity) null, blockBounds, entity -> true);
+            if(!foundEntities.isEmpty()) {
+                validPlantPos = false;
+            }
+        }
+
+        if(!validPlantPos) {
             if(!plantingFailed) {
                 greenCuts$randomNudge();
             }
@@ -101,7 +117,7 @@ public abstract class MixinItemStack extends Entity implements IAutoPlantable {
 
         // If it fails two dice rolls in a row, then mark this item stack entity as a failed plant.
         if(!GreenCutsUtils.runPlantingChance(serverLevel)) {
-            setPlantingFailed(true);
+            greenCuts$setPlantingFailed(true);
         }
     }
 
@@ -136,12 +152,12 @@ public abstract class MixinItemStack extends Entity implements IAutoPlantable {
 
 
     @Override
-    public boolean getPlantingFailed() {
+    public boolean greenCuts$getPlantingFailed() {
         return plantingFailed;
     }
 
     @Override
-    public void setPlantingFailed(boolean value) {
+    public void greenCuts$setPlantingFailed(boolean value) {
         plantingFailed = value;
     }
 
