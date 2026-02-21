@@ -11,6 +11,7 @@ pluginManagement {
             }
             filter {
                 includeGroup('net.fabricmc')
+                includeGroup('net.fabricmc.unpick')
                 includeGroup('fabric-loom')
             }
         }
@@ -47,5 +48,4 @@ plugins {
 rootProject.name = 'GreenCuts'
 include('common')
 include('fabric')
-include('neoforge')
-//include('forge')
+include('forge')

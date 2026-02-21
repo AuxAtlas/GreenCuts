@@ -34,4 +34,8 @@ fabric/runs/
 
 # neoforge
 
-neoforge/run/
+neoforge/runs/
+
+# forge
+
+forge/runs/

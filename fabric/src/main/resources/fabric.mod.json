@@ -9,14 +9,14 @@
     ],
     "contact": {
         "homepage": "https://modrinth.com/mod/greencuts",
-        "sources": "https://github.com/AuxJackDev/GreenCuts"
+        "sources": "https://github.com/AuxAtlas/GreenCuts"
     },
     "license": "${license}",
     "icon": "${mod_id}.png",
     "environment": "*",
     "entrypoints": {
         "main": [
-          "me.auxjackdev.greencuts.GreenCutsFabric"
+          "me.auxatlas.greencuts.GreenCutsFabric"
         ]
     },
     "mixins": [
